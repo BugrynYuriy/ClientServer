@@ -10,5 +10,5 @@ simple chat .... project under construction ...
 
 implemented:
 
-A. Server: connec  users , receives messages and sends them to all users
+1. Server: connec  users , receives messages and sends them to all users
 2. Client: connected to the server, sends and receives messages from the server
