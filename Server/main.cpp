@@ -1,19 +1,17 @@
 #include "SERVER.h"
 
-using namespace std;
+
 
 std::list<SOCKET> clients ;
 
 int main()
 {
-    WORD  wVersionRequested = MAKEWORD( 2, 2 );
+
+	WORD  wVersionRequested = MAKEWORD( 2, 2 );
     WSADATA wsaData;
 	sockaddr_in local_addr;
-	SOCKET client_socket ;
-	sockaddr_in client_addr;
-	int client_addr_size = sizeof ( client_addr );
-	HANDLE thread;
-
+	
+	// Initiates use of the Winsock DLL by a process
 	if( !initWinsockDll( wVersionRequested,&wsaData ) )
 	{
 		_getch();
@@ -26,24 +24,14 @@ int main()
 		printf (" Socket ( ) error    %d \n ", WSAGetLastError ( ) );
 	}
     
+	/* 
+	   Associates a local address with a socket and  places them 
+	   in a state in which it is listening for an incoming connection.
+	*/
 	CONNECT(&local_addr,s);
     
-	cout<<"Server receive ready"<<endl;
-    cout<<endl;
-    
-	
-	while( ( client_socket = accept ( s, ( sockaddr * )&client_addr, &client_addr_size ) ) )
-    {
-	  
-	  cout<<inet_ntoa(client_addr.sin_addr)<<" connected \n";
-	 
-	  thread = (HANDLE) _beginthreadex ( NULL , NULL , ThreadFunc , &client_socket , NULL , NULL );
-
-	  CloseHandle ( thread );
-
-	  clients.push_back(client_socket);
-    
-	}
+	// processing clients' requests
+	clientsRequests(s);
 	
 	closesocket(s);
 	WSACleanup();
